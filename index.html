@@ -465,88 +465,6 @@
       margin-top: 2rem;
     }
 
-    .kid-carousel {
-      position: relative;
-      max-width: 720px;
-      margin: 2.5rem auto 0;
-      border-radius: 24px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.06);
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
-    }
-
-    .kid-carousel-track {
-      display: flex;
-      transition: transform 0.6s ease;
-      will-change: transform;
-    }
-
-    .kid-carousel-slide {
-      min-width: 100%;
-      height: 320px;
-      position: relative;
-    }
-
-    .kid-carousel-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .kid-carousel-controls {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-      pointer-events: none;
-    }
-
-    .kid-carousel-button {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(0, 0, 0, 0.55);
-      color: #fff;
-      font-size: 1.4rem;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      pointer-events: auto;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .kid-carousel-button:hover {
-      transform: scale(1.05);
-      background: rgba(0, 0, 0, 0.7);
-    }
-
-    .kid-carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 1rem 0 1.25rem;
-      background: rgba(0, 0, 0, 0.25);
-    }
-
-    .kid-carousel-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(255, 255, 255, 0.4);
-      cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .kid-carousel-dot.active {
-      background: var(--gold);
-      transform: scale(1.2);
-    }
-
     .section-title {
       position: relative;
     }
@@ -691,33 +609,6 @@
       </div>
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.google.com/maps/search/?api=1&query=Golagamudi" alt="QR code for Golagamudi" />
     </div>
-    <div class="kid-carousel" aria-label="Kid photo carousel">
-      <div class="kid-carousel-track" id="kidCarouselTrack">
-        <div class="kid-carousel-slide">
-          <img src="kid-1.jpg" alt="Kid photo 1" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1503455637927-730bce8583c0?auto=format&fit=crop&w=1200&q=80';" />
-        </div>
-        <div class="kid-carousel-slide">
-          <img src="kid-2.jpg" alt="Kid photo 2" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1504151932400-72d4384f04b3?auto=format&fit=crop&w=1200&q=80';" />
-        </div>
-        <div class="kid-carousel-slide">
-          <img src="kid-3.jpg" alt="Kid photo 3" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1200&q=80';" />
-        </div>
-        <div class="kid-carousel-slide">
-          <img src="kid-4.jpg" alt="Kid photo 4" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1200&q=80';" />
-        </div>
-        <div class="kid-carousel-slide">
-          <img src="kid-5.jpg" alt="Kid photo 5" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1491013516836-7db643ee125a?auto=format&fit=crop&w=1200&q=80';" />
-        </div>
-        <div class="kid-carousel-slide">
-          <img src="kid-6.jpg" alt="Kid photo 6" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=1200&q=80';" />
-        </div>
-      </div>
-      <div class="kid-carousel-controls">
-        <button class="kid-carousel-button" id="kidPrev" type="button" aria-label="Previous photo">‹</button>
-        <button class="kid-carousel-button" id="kidNext" type="button" aria-label="Next photo">›</button>
-      </div>
-      <div class="kid-carousel-dots" id="kidCarouselDots" aria-hidden="true"></div>
-    </div>
   </section>
 
   <footer>
@@ -793,80 +684,6 @@
       slideIndex = (slideIndex + 1) % slides.length;
       slides[slideIndex].classList.add("active");
     }, 5000);
-
-    const kidCarouselTrack = document.getElementById("kidCarouselTrack");
-    const kidCarouselDots = document.getElementById("kidCarouselDots");
-    const kidPrev = document.getElementById("kidPrev");
-    const kidNext = document.getElementById("kidNext");
-    const kidSlides = kidCarouselTrack ? Array.from(kidCarouselTrack.children) : [];
-    let kidIndex = 0;
-    let kidTimer;
-
-    const updateKidCarousel = () => {
-      if (!kidCarouselTrack) {
-        return;
-      }
-      kidCarouselTrack.style.transform = `translateX(-${kidIndex * 100}%)`;
-      if (kidCarouselDots) {
-        Array.from(kidCarouselDots.children).forEach((dot, index) => {
-          dot.classList.toggle("active", index === kidIndex);
-        });
-      }
-    };
-
-    const setKidIndex = (index) => {
-      kidIndex = (index + kidSlides.length) % kidSlides.length;
-      updateKidCarousel();
-    };
-
-    const startKidTimer = () => {
-      if (kidTimer || kidSlides.length < 2) {
-        return;
-      }
-      kidTimer = setInterval(() => {
-        setKidIndex(kidIndex + 1);
-      }, 4000);
-    };
-
-    const stopKidTimer = () => {
-      if (kidTimer) {
-        clearInterval(kidTimer);
-        kidTimer = null;
-      }
-    };
-
-    if (kidCarouselDots && kidSlides.length) {
-      kidSlides.forEach((_, index) => {
-        const dot = document.createElement("button");
-        dot.type = "button";
-        dot.className = "kid-carousel-dot";
-        dot.addEventListener("click", () => {
-          setKidIndex(index);
-        });
-        kidCarouselDots.appendChild(dot);
-      });
-    }
-
-    if (kidPrev) {
-      kidPrev.addEventListener("click", () => {
-        setKidIndex(kidIndex - 1);
-      });
-    }
-
-    if (kidNext) {
-      kidNext.addEventListener("click", () => {
-        setKidIndex(kidIndex + 1);
-      });
-    }
-
-    if (kidCarouselTrack) {
-      kidCarouselTrack.addEventListener("mouseenter", stopKidTimer);
-      kidCarouselTrack.addEventListener("mouseleave", startKidTimer);
-      kidCarouselTrack.addEventListener("touchstart", stopKidTimer, { passive: true });
-      kidCarouselTrack.addEventListener("touchend", startKidTimer);
-      updateKidCarousel();
-      startKidTimer();
-    }
 
     const createFlower = () => {
       const flower = document.createElement("div");
