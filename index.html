@@ -401,8 +401,10 @@
     .slide {
       position: absolute;
       inset: 0;
-      background-size: cover;
+      background-size: contain;
       background-position: center;
+      background-repeat: no-repeat;
+      background-color: rgba(0, 0, 0, 0.2);
       opacity: 0;
       transition: opacity 1s ease, transform 8s ease;
       transform: scale(1.05);
@@ -527,7 +529,16 @@
       }
 
       .bell-glow {
-        top: 4.5rem;
+        top: 1.75rem;
+      }
+
+      .bell {
+        font-size: 2rem;
+      }
+
+      .bell-halo {
+        width: 90px;
+        height: 90px;
       }
 
       .mandala-progress {
@@ -668,6 +679,8 @@
     <p data-lang="en">With folded hands, we await your blessings for our little prince.</p>
     <p data-lang="te" style="display:none;">మా చిన్నారికి ఆశీర్వాదాలతో మీ రాక కోసం హృదయపూర్వకంగా ఎదురుచూస్తున్నాము.</p>
     <p>— Chandra & Sindhu</p>
+    <p>© <span id="copyright-year"></span> All rights reserved • Developed by Chandra with love 💛</p>
+    <p>Visitor count: <span id="visitor-count">1</span></p>
   </footer>
 
   <script>
@@ -677,12 +690,16 @@
     const slides = document.querySelectorAll(".slide");
     const musicToggle = document.getElementById("musicToggle");
     const progressRing = document.getElementById("progress-ring");
+    const copyrightYear = document.getElementById("copyright-year");
+    const visitorCount = document.getElementById("visitor-count");
     const totalLength = progressRing.getTotalLength();
     const slokaText = shloka.textContent.trim();
 
     let slideIndex = 0;
     let audioContext;
     let bellIntervalId = null;
+    let droneGain = null;
+    let droneOscillator = null;
     let isPlaying = false;
 
     const setLanguage = () => {
@@ -694,6 +711,14 @@
 
     toggle.addEventListener("change", setLanguage);
     setLanguage();
+    copyrightYear.textContent = new Date().getFullYear();
+
+    const updateVisitorCount = () => {
+      const count = Number.parseInt(localStorage.getItem("visitorCount") ?? "0", 10) + 1;
+      localStorage.setItem("visitorCount", count.toString());
+      visitorCount.textContent = count.toLocaleString("en-IN");
+    };
+    updateVisitorCount();
 
     const showShloka = () => {
       const rect = shloka.getBoundingClientRect();
@@ -763,35 +788,55 @@
       return true;
     };
 
+    const startTempleDrone = () => {
+      if (droneOscillator) {
+        return;
+      }
+      droneOscillator = audioContext.createOscillator();
+      droneGain = audioContext.createGain();
+      droneOscillator.type = "sine";
+      droneOscillator.frequency.value = 146.83;
+      droneGain.gain.value = 0.05;
+      droneOscillator.connect(droneGain);
+      droneGain.connect(audioContext.destination);
+      droneOscillator.start();
+    };
+
+    const stopTempleDrone = () => {
+      if (!droneOscillator || !droneGain) {
+        return;
+      }
+      const now = audioContext.currentTime;
+      droneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+      droneOscillator.stop(now + 0.7);
+      droneOscillator = null;
+      droneGain = null;
+    };
+
     const createBellChime = () => {
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
       }
       const now = audioContext.currentTime;
-      const carrier = audioContext.createOscillator();
-      const modulator = audioContext.createOscillator();
-      const modGain = audioContext.createGain();
       const outputGain = audioContext.createGain();
-
-      carrier.type = "sine";
-      modulator.type = "sine";
-      carrier.frequency.value = 520;
-      modulator.frequency.value = 6;
-      modGain.gain.value = 100;
-
-      modulator.connect(modGain);
-      modGain.connect(carrier.frequency);
-      carrier.connect(outputGain);
-      outputGain.connect(audioContext.destination);
+      const partials = [528, 792, 1056, 1320];
 
       outputGain.gain.setValueAtTime(0, now);
-      outputGain.gain.linearRampToValueAtTime(0.6, now + 0.05);
-      outputGain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+      outputGain.gain.linearRampToValueAtTime(0.5, now + 0.06);
+      outputGain.gain.exponentialRampToValueAtTime(0.0008, now + 2.4);
+      outputGain.connect(audioContext.destination);
 
-      carrier.start(now);
-      modulator.start(now);
-      carrier.stop(now + 2);
-      modulator.stop(now + 2);
+      partials.forEach((frequency, index) => {
+        const osc = audioContext.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = frequency;
+        const gain = audioContext.createGain();
+        gain.gain.value = 0.35 - index * 0.07;
+        osc.connect(gain);
+        gain.connect(outputGain);
+        osc.start(now);
+        osc.stop(now + 2.6);
+      });
     };
 
     const attemptPlayMusic = async () => {
@@ -800,9 +845,10 @@
           audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
         await audioContext.resume();
+        startTempleDrone();
         createBellChime();
         if (!bellIntervalId) {
-          bellIntervalId = setInterval(createBellChime, 3200);
+          bellIntervalId = setInterval(createBellChime, 3000);
         }
         isPlaying = true;
         musicToggle.textContent = "⏸ Pause Temple Music";
@@ -837,6 +883,7 @@
           clearInterval(bellIntervalId);
           bellIntervalId = null;
         }
+        stopTempleDrone();
         isPlaying = false;
         musicToggle.textContent = "🎶 Play Temple Music";
       }
