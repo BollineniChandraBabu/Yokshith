@@ -502,6 +502,10 @@
       background: linear-gradient(180deg, rgba(12, 6, 3, 0.9), rgba(7, 4, 2, 1));
     }
 
+    .copyright-text {
+      padding-top: 0.75rem;
+    }
+
     .lottie-row {
       display: flex;
       flex-wrap: wrap;
@@ -680,7 +684,7 @@
     <p data-lang="te" style="display:none;">మా చిన్నారికి ఆశీర్వాదాలతో మీ రాక కోసం హృదయపూర్వకంగా ఎదురుచూస్తున్నాము.</p>
     <p>— Chandra & Sindhu</p>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <p>© <span id="copyright-year"></span> All rights reserved • Developed by Chandra with love 💛</p>
+    <p class="copyright-text">© <span id="copyright-year"></span> All rights reserved • Developed by Chandra with love 💛</p>
     <p>Visitor count: <span id="visitor-count">1</span></p>
   </footer>
 
@@ -797,7 +801,8 @@
       droneGain = audioContext.createGain();
       droneOscillator.type = "sine";
       droneOscillator.frequency.value = 146.83;
-      droneGain.gain.value = 0.05;
+      droneGain.gain.setValueAtTime(0, audioContext.currentTime);
+      droneGain.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 1.2);
       droneOscillator.connect(droneGain);
       droneGain.connect(audioContext.destination);
       droneOscillator.start();
@@ -823,8 +828,8 @@
       const partials = [528, 792, 1056, 1320];
 
       outputGain.gain.setValueAtTime(0, now);
-      outputGain.gain.linearRampToValueAtTime(0.5, now + 0.06);
-      outputGain.gain.exponentialRampToValueAtTime(0.0008, now + 2.4);
+      outputGain.gain.linearRampToValueAtTime(0.32, now + 0.08);
+      outputGain.gain.exponentialRampToValueAtTime(0.0006, now + 2.8);
       outputGain.connect(audioContext.destination);
 
       partials.forEach((frequency, index) => {
@@ -832,11 +837,11 @@
         osc.type = "sine";
         osc.frequency.value = frequency;
         const gain = audioContext.createGain();
-        gain.gain.value = 0.35 - index * 0.07;
+        gain.gain.value = 0.26 - index * 0.05;
         osc.connect(gain);
         gain.connect(outputGain);
         osc.start(now);
-        osc.stop(now + 2.6);
+        osc.stop(now + 3.0);
       });
     };
 
@@ -849,7 +854,7 @@
         startTempleDrone();
         createBellChime();
         if (!bellIntervalId) {
-          bellIntervalId = setInterval(createBellChime, 3000);
+          bellIntervalId = setInterval(createBellChime, 4500);
         }
         isPlaying = true;
         musicToggle.textContent = "⏸ Pause Temple Music";
