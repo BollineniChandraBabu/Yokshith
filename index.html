@@ -217,7 +217,7 @@
       display: inline-flex;
       gap: 0.75rem;
       align-items: center;
-      margin-top: 1.5rem;
+      margin-top: 0;
       background: rgba(0, 0, 0, 0.35);
       padding: 0.5rem 1rem;
       border-radius: 999px;
@@ -263,19 +263,15 @@
     }
 
     .language-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 0.75rem 8vw;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
-      background: rgba(8, 4, 2, 0.75);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      z-index: 20;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 999px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
     }
 
     .language-bar span {
@@ -480,16 +476,16 @@
 
     @media (max-width: 768px) {
       header.hero {
-        padding-top: 8.5rem;
+        padding-top: 7rem;
       }
 
       .bell-glow {
-        top: 5.5rem;
+        top: 4.5rem;
       }
 
       .mandala-progress {
         right: 1rem;
-        top: 4.25rem;
+        top: 2rem;
         width: 56px;
         height: 56px;
       }
@@ -508,14 +504,6 @@
   </style>
 </head>
 <body>
-  <div class="language-bar">
-    <span>EN</span>
-    <div class="toggle">
-      <input id="langToggle" type="checkbox" />
-    </div>
-    <span>తెలుగు</span>
-  </div>
-
   <div class="intro-overlay">
     <div class="intro-text">
       <span>Namaskaram</span>
@@ -552,6 +540,13 @@
         <span data-lang="te" style="display:none;">చి. యోక్షిత్ సాయి</span>
       </h1>
       <div class="cta-card reveal">
+        <div class="language-bar">
+          <span>EN</span>
+          <div class="toggle">
+            <input id="langToggle" type="checkbox" />
+          </div>
+          <span>తెలుగు</span>
+        </div>
         <p data-lang="en">With the blessings of the Almighty, we invite you to celebrate the first rice ceremony of our beloved little one. Your presence and blessings will make the moment divine.</p>
         <p data-lang="te" style="display:none;">దైవ ఆశీస్సులతో మా ప్రియ చిన్నారికి తొలి అన్నప్రాశన వేడుకకు మీ కుటుంబ సమేతంగా హాజరై ఆశీర్వదించండి.</p>
       </div>
