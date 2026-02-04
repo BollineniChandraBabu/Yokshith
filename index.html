@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Annaprasana Invitation | చి. యోక్షిత్ సాయి</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+Telugu:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <style>
+    :root {
+      --gold: #f6d36b;
+      --deep: #341c0f;
+      --rose: #f7b4b8;
+      --cream: #fff7ea;
+      --accent: #ff7a59;
+      --glow: rgba(255, 214, 117, 0.8);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #26110a, #120805 60%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #3f1e0f 0%, #110806 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      animation: introFade 6s ease forwards;
+    }
+
+    .intro-text {
+      font-family: "Cinzel", serif;
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: var(--gold);
+      text-shadow: 0 0 30px var(--glow);
+      letter-spacing: 0.2rem;
+    }
+
+    @keyframes introFade {
+      0% {
+        opacity: 1;
+      }
+      70% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    .bell-glow {
+      position: absolute;
+      top: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 5;
+    }
+
+    .bell {
+      font-size: 2.5rem;
+      animation: bellRing 2.5s ease-in-out infinite;
+      text-shadow: 0 0 20px var(--glow);
+    }
+
+    .bell-halo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 214, 117, 0.3);
+      box-shadow: 0 0 30px var(--glow), inset 0 0 20px rgba(255, 214, 117, 0.5);
+      animation: haloPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes bellRing {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      25% {
+        transform: rotate(6deg);
+      }
+      75% {
+        transform: rotate(-6deg);
+      }
+    }
+
+    @keyframes haloPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: scale(1.15);
+        opacity: 1;
+      }
+    }
+
+    header.hero {
+      min-height: 100vh;
+      padding: 6rem 8vw 4rem;
+      display: grid;
+      place-items: center;
+      position: relative;
+      text-align: center;
+      background: url("https://images.unsplash.com/photo-1507908708918-778587c9e563?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+    }
+
+    header.hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(7, 4, 2, 0.9), rgba(14, 7, 4, 0.7));
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 800px;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-family: "Cinzel", serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.4rem;
+    }
+
+    .hero-subtitle {
+      margin-top: 1rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+      color: #f9e7c4;
+    }
+
+    .name-title {
+      margin-top: 2rem;
+      font-size: clamp(2.2rem, 4vw, 3.3rem);
+      font-family: "Noto Serif Telugu", serif;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    }
+
+    .cta-card {
+      margin-top: 2.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .cta-card p {
+      font-size: 1.1rem;
+      color: #fcebd0;
+      line-height: 1.7;
+    }
+
+    .toggle {
+      display: inline-flex;
+      gap: 0.75rem;
+      align-items: center;
+      margin-top: 1.5rem;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .toggle input {
+      appearance: none;
+      width: 46px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+
+    .toggle input::after {
+      content: "";
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle input:checked {
+      background: var(--accent);
+    }
+
+    .toggle input:checked::after {
+      transform: translateX(20px);
+    }
+
+    section {
+      padding: 4.5rem 8vw;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      font-family: "Cinzel", serif;
+      color: var(--gold);
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .info-card {
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      padding: 1.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .info-card h3 {
+      color: #ffe0a3;
+      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+    }
+
+    .info-card p {
+      color: #f7e7cc;
+      line-height: 1.6;
+    }
+
+    .shloka {
+      font-family: "Noto Serif Telugu", serif;
+      font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+      text-align: center;
+      color: #f7dca2;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease;
+    }
+
+    .shloka.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slideshow {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      height: 380px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .qr-card {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .qr-card img {
+      width: 180px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .music-control {
+      margin-top: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .flower {
+      position: fixed;
+      top: -10vh;
+      font-size: 1.5rem;
+      animation: fall linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mandala-progress {
+      position: fixed;
+      right: 2rem;
+      top: 2rem;
+      width: 70px;
+      height: 70px;
+      z-index: 10;
+    }
+
+    .mandala-progress svg {
+      transform: rotate(-90deg);
+    }
+
+    .mandala-center {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 214, 117, 0.6);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 2rem 4rem;
+      color: #f9e4c4;
+      background: linear-gradient(180deg, rgba(12, 6, 3, 0.9), rgba(7, 4, 2, 1));
+    }
+
+    .lottie-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      header.hero {
+        padding-top: 7rem;
+      }
+
+      .bell-glow {
+        top: 1.5rem;
+      }
+
+      .mandala-progress {
+        right: 1rem;
+        top: 1rem;
+        width: 56px;
+        height: 56px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="intro-overlay">
+    <div class="intro-text">Namaskaram</div>
+  </div>
+
+  <div class="bell-glow">
+    <div class="bell">🔔</div>
+    <div class="bell-halo"></div>
+    <div class="bell">🔔</div>
+  </div>
+
+  <div class="mandala-progress">
+    <svg width="70" height="70">
+      <circle cx="35" cy="35" r="30" stroke="rgba(255,255,255,0.2)" stroke-width="4" fill="none"></circle>
+      <circle id="progress-ring" cx="35" cy="35" r="30" stroke="url(#grad)" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="188" stroke-dashoffset="188"></circle>
+      <defs>
+        <linearGradient id="grad" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="#f6d36b" />
+          <stop offset="100%" stop-color="#ff7a59" />
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="mandala-center"></div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-content">
+      <p class="hero-title">Annaprasana Invitation</p>
+      <p class="hero-subtitle">Blessed by the divine and guided by tradition</p>
+      <h1 class="name-title">చి. యోక్షిత్ సాయి</h1>
+      <div class="cta-card reveal">
+        <p data-lang="en">With the blessings of the Almighty, we invite you to celebrate the first rice ceremony of our beloved little one. Your presence and blessings will make the moment divine.</p>
+        <p data-lang="te" style="display:none;">దైవ ఆశీస్సులతో మా ప్రియ చిన్నారికి తొలి అన్నప్రాశన పర్వదిన వేడుకకు మీ కుటుంబ సమేతంగా హాజరై ఆశీర్వదించగలరు.</p>
+        <div class="toggle">
+          <span>EN</span>
+          <input id="langToggle" type="checkbox" />
+          <span>తెలుగు</span>
+        </div>
+      </div>
+      <button class="music-control" id="musicToggle">🎶 Play Temple Music</button>
+    </div>
+  </header>
+
+  <section>
+    <h2 class="section-title">Sacred Shloka</h2>
+    <p class="shloka" id="shloka">ॐ अन्नपूर्णे सदापूर्णे शङ्करप्राणवल्लभे | ज्ञानवैरेाग्यसिद्ध्यर्थं भिक्षां देहि च पार्वति ||</p>
+  </section>
+
+  <section>
+    <h2 class="section-title">Event Highlights</h2>
+    <div class="info-grid">
+      <div class="info-card reveal">
+        <h3>Invitees</h3>
+        <p data-lang="en">Chandra & Sindhu request the honor of your presence.</p>
+        <p data-lang="te" style="display:none;">చంద్ర & సింధు గారు మీను ఆహ్వానిస్తున్నారు.</p>
+      </div>
+      <div class="info-card reveal">
+        <h3>Location</h3>
+        <p data-lang="en">Golagamudi, a serene and sacred temple town.</p>
+        <p data-lang="te" style="display:none;">గొలగమూడి — ప్రశాంతమైన పవిత్ర ఆలయ పట్నం.</p>
+      </div>
+      <div class="info-card reveal">
+        <h3>Tradition</h3>
+        <p data-lang="en">A blend of Telugu heritage, Vedic chants, and joyful blessings.</p>
+        <p data-lang="te" style="display:none;">తెలుగు సంప్రదాయం, వైదిక మంత్రాలు, ఆనంద ఆశీర్వాదాలు.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Memories & Moments</h2>
+    <div class="slideshow reveal">
+      <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=1400&q=80');"></div>
+      <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1400&q=80');"></div>
+      <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1470165516293-192d7aab6080?auto=format&fit=crop&w=1400&q=80');"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Visit Us</h2>
+    <div class="qr-card reveal">
+      <div>
+        <h3>Scan for Google Maps</h3>
+        <p data-lang="en">Open the location instantly and join us at Golagamudi.</p>
+        <p data-lang="te" style="display:none;">గొలగమూడి స్థానం మ్యాప్స్‌లో తెరచేందుకు స్కాన్ చేయండి.</p>
+      </div>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.google.com/maps/search/?api=1&query=Golagamudi" alt="QR code for Golagamudi" />
+    </div>
+    <div class="lottie-row">
+      <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_tljjahw0.json" background="transparent" speed="1" style="width: 180px; height: 180px;" loop autoplay></lottie-player>
+      <lottie-player src="https://assets3.lottiefiles.com/packages/lf20_kxsd2ytq.json" background="transparent" speed="1" style="width: 180px; height: 180px;" loop autoplay></lottie-player>
+      <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_jcikwtux.json" background="transparent" speed="1" style="width: 180px; height: 180px;" loop autoplay></lottie-player>
+    </div>
+  </section>
+
+  <footer>
+    <p data-lang="en">With folded hands, we await your blessings for our little prince.</p>
+    <p data-lang="te" style="display:none;">మా చిన్నారికి ఆశీర్వాదాలతో మీ రాక కోసం హృదయపూర్వకంగా ఎదురుచూస్తున్నాము.</p>
+    <p>— Chandra & Sindhu</p>
+  </footer>
+
+  <audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1f9a86c9bb.mp3?filename=indian-temple-bells-111103.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const toggle = document.getElementById("langToggle");
+    const langBlocks = document.querySelectorAll("[data-lang]");
+    const shloka = document.getElementById("shloka");
+    const slides = document.querySelectorAll(".slide");
+    const musicToggle = document.getElementById("musicToggle");
+    const bgMusic = document.getElementById("bgMusic");
+    const progressRing = document.getElementById("progress-ring");
+    const totalLength = progressRing.getTotalLength();
+
+    let slideIndex = 0;
+
+    const setLanguage = () => {
+      const isTelugu = toggle.checked;
+      langBlocks.forEach((block) => {
+        block.style.display = block.dataset.lang === (isTelugu ? "te" : "en") ? "block" : "none";
+      });
+    };
+
+    toggle.addEventListener("change", setLanguage);
+    setLanguage();
+
+    const showShloka = () => {
+      const rect = shloka.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.8) {
+        shloka.classList.add("visible");
+      }
+    };
+
+    const revealElements = document.querySelectorAll(".reveal");
+    const revealOnScroll = () => {
+      revealElements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.85) {
+          el.classList.add("visible");
+        }
+      });
+      showShloka();
+    };
+
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const progress = Math.min(scrollTop / docHeight, 1);
+      progressRing.style.strokeDashoffset = totalLength - totalLength * progress;
+    };
+
+    window.addEventListener("scroll", () => {
+      revealOnScroll();
+      updateProgress();
+    });
+
+    window.addEventListener("load", () => {
+      revealOnScroll();
+      updateProgress();
+    });
+
+    setInterval(() => {
+      slides[slideIndex].classList.remove("active");
+      slideIndex = (slideIndex + 1) % slides.length;
+      slides[slideIndex].classList.add("active");
+    }, 5000);
+
+    const createFlower = () => {
+      const flower = document.createElement("div");
+      flower.classList.add("flower");
+      flower.textContent = ["🌸", "🌺", "🌼", "💮"][Math.floor(Math.random() * 4)];
+      flower.style.left = `${Math.random() * 100}vw`;
+      flower.style.animationDuration = `${8 + Math.random() * 6}s`;
+      flower.style.opacity = `${0.6 + Math.random() * 0.4}`;
+      document.body.appendChild(flower);
+      setTimeout(() => flower.remove(), 14000);
+    };
+
+    setInterval(createFlower, 500);
+
+    musicToggle.addEventListener("click", async () => {
+      if (bgMusic.paused) {
+        try {
+          await bgMusic.play();
+          musicToggle.textContent = "⏸ Pause Temple Music";
+        } catch (error) {
+          musicToggle.textContent = "🔊 Tap to Enable Music";
+        }
+      } else {
+        bgMusic.pause();
+        musicToggle.textContent = "🎶 Play Temple Music";
+      }
+    });
+  </script>
+</body>
+</html>
