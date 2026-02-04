@@ -26,7 +26,6 @@
       background: radial-gradient(circle at top, #26110a, #120805 60%);
       color: #fff;
       overflow-x: hidden;
-      padding-bottom: 140px;
     }
 
     .intro-overlay {
@@ -501,15 +500,6 @@
       padding: 3rem 2rem 4rem;
       color: #f9e4c4;
       background: linear-gradient(180deg, rgba(12, 6, 3, 0.9), rgba(7, 4, 2, 1));
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      z-index: 20;
-    }
-
-    .footer-blessing {
-      margin-bottom: 1.25rem;
     }
 
     .lottie-row {
@@ -629,15 +619,6 @@
     </div>
   </header>
 
-  <audio
-    id="templeAudio"
-    src="https://pixabay.com/music/download/116509/"
-    preload="auto"
-    autoplay
-    loop
-    playsinline
-  ></audio>
-
   <section>
     <h2 class="section-title">Sacred Shloka</h2>
     <p class="shloka" id="shloka">ॐ अन्नपूर्णे सदापूर्णे शङ्करप्राणवल्लभे । ज्ञानवैराग्यसिद्ध्यर्थं भिक्षां देहि च पार्वति ॥</p>
@@ -695,8 +676,8 @@
   </section>
 
   <footer>
-    <p class="footer-blessing" data-lang="en">With folded hands, we await your blessings for our little prince.</p>
-    <p class="footer-blessing" data-lang="te" style="display:none;">మా చిన్నారికి ఆశీర్వాదాలతో మీ రాక కోసం హృదయపూర్వకంగా ఎదురుచూస్తున్నాము.</p>
+    <p data-lang="en">With folded hands, we await your blessings for our little prince.</p>
+    <p data-lang="te" style="display:none;">మా చిన్నారికి ఆశీర్వాదాలతో మీ రాక కోసం హృదయపూర్వకంగా ఎదురుచూస్తున్నాము.</p>
     <p>— Chandra & Sindhu</p>
     <p>© <span id="copyright-year"></span> All rights reserved • Developed by Chandra with love 💛</p>
     <p>Visitor count: <span id="visitor-count">1</span></p>
@@ -711,11 +692,14 @@
     const progressRing = document.getElementById("progress-ring");
     const copyrightYear = document.getElementById("copyright-year");
     const visitorCount = document.getElementById("visitor-count");
-    const templeAudio = document.getElementById("templeAudio");
     const totalLength = progressRing.getTotalLength();
     const slokaText = shloka.textContent.trim();
 
     let slideIndex = 0;
+    let audioContext;
+    let bellIntervalId = null;
+    let droneGain = null;
+    let droneOscillator = null;
     let isPlaying = false;
 
     const setLanguage = () => {
@@ -790,8 +774,6 @@
 
     setInterval(createFlower, 500);
 
-    templeAudio.volume = 0.6;
-
     const playSlokaFallback = () => {
       if (!("speechSynthesis" in window)) {
         return false;
@@ -806,9 +788,68 @@
       return true;
     };
 
+    const startTempleDrone = () => {
+      if (droneOscillator) {
+        return;
+      }
+      droneOscillator = audioContext.createOscillator();
+      droneGain = audioContext.createGain();
+      droneOscillator.type = "sine";
+      droneOscillator.frequency.value = 146.83;
+      droneGain.gain.value = 0.05;
+      droneOscillator.connect(droneGain);
+      droneGain.connect(audioContext.destination);
+      droneOscillator.start();
+    };
+
+    const stopTempleDrone = () => {
+      if (!droneOscillator || !droneGain) {
+        return;
+      }
+      const now = audioContext.currentTime;
+      droneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+      droneOscillator.stop(now + 0.7);
+      droneOscillator = null;
+      droneGain = null;
+    };
+
+    const createBellChime = () => {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const now = audioContext.currentTime;
+      const outputGain = audioContext.createGain();
+      const partials = [528, 792, 1056, 1320];
+
+      outputGain.gain.setValueAtTime(0, now);
+      outputGain.gain.linearRampToValueAtTime(0.5, now + 0.06);
+      outputGain.gain.exponentialRampToValueAtTime(0.0008, now + 2.4);
+      outputGain.connect(audioContext.destination);
+
+      partials.forEach((frequency, index) => {
+        const osc = audioContext.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = frequency;
+        const gain = audioContext.createGain();
+        gain.gain.value = 0.35 - index * 0.07;
+        osc.connect(gain);
+        gain.connect(outputGain);
+        osc.start(now);
+        osc.stop(now + 2.6);
+      });
+    };
+
     const attemptPlayMusic = async () => {
       try {
-        await templeAudio.play();
+        if (!audioContext) {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        await audioContext.resume();
+        startTempleDrone();
+        createBellChime();
+        if (!bellIntervalId) {
+          bellIntervalId = setInterval(createBellChime, 3000);
+        }
         isPlaying = true;
         musicToggle.textContent = "⏸ Pause Temple Music";
         return true;
@@ -838,17 +879,14 @@
           playSlokaFallback();
         }
       } else {
-        templeAudio.pause();
-        templeAudio.currentTime = 0;
+        if (bellIntervalId) {
+          clearInterval(bellIntervalId);
+          bellIntervalId = null;
+        }
+        stopTempleDrone();
         isPlaying = false;
         musicToggle.textContent = "🎶 Play Temple Music";
       }
-    });
-
-    window.addEventListener("load", () => {
-      attemptPlayMusic().catch(() => {
-        musicToggle.textContent = "🔊 Tap to Enable Music";
-      });
     });
 
   </script>
