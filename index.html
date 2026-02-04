@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Annaprasana Invitation | చి. యోక్షిత్ సాయి</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+Telugu:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@lottiefiles/lottie-player@2.0.4/dist/lottie-player.js"></script>
   <style>
     :root {
       --gold: #f6d36b;
@@ -46,6 +46,20 @@
       color: var(--gold);
       text-shadow: 0 0 30px var(--glow);
       letter-spacing: 0.2rem;
+      text-align: center;
+    }
+
+    .intro-text span {
+      display: block;
+    }
+
+    .intro-subtext {
+      margin-top: 0.75rem;
+      font-family: "Poppins", sans-serif;
+      font-size: clamp(1rem, 2.6vw, 1.4rem);
+      color: #f9e7c4;
+      letter-spacing: 0.08rem;
+      text-transform: uppercase;
     }
 
     @keyframes introFade {
@@ -112,7 +126,7 @@
 
     header.hero {
       min-height: 100vh;
-      padding: 6rem 8vw 4rem;
+      padding: 8rem 8vw 4rem;
       display: grid;
       place-items: center;
       position: relative;
@@ -244,6 +258,28 @@
 
     .toggle input:checked::after {
       transform: translateX(20px);
+    }
+
+    .language-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 0.75rem 8vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: rgba(8, 4, 2, 0.75);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 20;
+    }
+
+    .language-bar span {
+      font-weight: 600;
+      letter-spacing: 0.05rem;
+      color: #f7e7cc;
     }
 
     section {
@@ -427,6 +463,18 @@
       margin-top: 2rem;
     }
 
+    .lottie-fallback {
+      width: 180px;
+      height: 180px;
+      display: grid;
+      place-items: center;
+      font-size: 3rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+    }
+
     .section-title {
       position: relative;
     }
@@ -442,25 +490,47 @@
 
     @media (max-width: 768px) {
       header.hero {
-        padding-top: 7rem;
+        padding-top: 8.5rem;
       }
 
       .bell-glow {
-        top: 1.5rem;
+        top: 4.5rem;
       }
 
       .mandala-progress {
         right: 1rem;
-        top: 1rem;
+        top: 4.25rem;
         width: 56px;
         height: 56px;
+      }
+
+      .intro-text {
+        font-size: clamp(1.8rem, 7vw, 3rem);
+        letter-spacing: 0.12rem;
+        padding: 0 1.5rem;
+      }
+
+      .intro-subtext {
+        font-size: clamp(0.95rem, 3.5vw, 1.2rem);
+        letter-spacing: 0.06rem;
       }
     }
   </style>
 </head>
 <body>
+  <div class="language-bar">
+    <span>EN</span>
+    <div class="toggle">
+      <input id="langToggle" type="checkbox" />
+    </div>
+    <span>తెలుగు</span>
+  </div>
+
   <div class="intro-overlay">
-    <div class="intro-text">Namaskaram</div>
+    <div class="intro-text">
+      <span>Namaskaram</span>
+      <span class="intro-subtext">Welcome to the Annaprasana Ceremony</span>
+    </div>
   </div>
 
   <div class="bell-glow">
@@ -494,11 +564,6 @@
       <div class="cta-card reveal">
         <p data-lang="en">With the blessings of the Almighty, we invite you to celebrate the first rice ceremony of our beloved little one. Your presence and blessings will make the moment divine.</p>
         <p data-lang="te" style="display:none;">దైవ ఆశీస్సులతో మా ప్రియ చిన్నారికి తొలి అన్నప్రాశన వేడుకకు మీ కుటుంబ సమేతంగా హాజరై ఆశీర్వదించండి.</p>
-        <div class="toggle">
-          <span>EN</span>
-          <input id="langToggle" type="checkbox" />
-          <span>తెలుగు</span>
-        </div>
       </div>
       <button class="music-control" id="musicToggle">🎶 Play Temple Music</button>
     </div>
@@ -567,7 +632,7 @@
     <p>— Chandra & Sindhu</p>
   </footer>
 
-  <audio id="bgMusic" loop>
+  <audio id="bgMusic" loop preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1f9a86c9bb.mp3?filename=indian-temple-bells-111103.mp3" type="audio/mpeg" />
   </audio>
 
@@ -580,6 +645,7 @@
     const bgMusic = document.getElementById("bgMusic");
     const progressRing = document.getElementById("progress-ring");
     const totalLength = progressRing.getTotalLength();
+    const slokaText = shloka.textContent.trim();
 
     let slideIndex = 0;
 
@@ -626,6 +692,7 @@
     window.addEventListener("load", () => {
       revealOnScroll();
       updateProgress();
+      ensureLottiePlayback();
     });
 
     setInterval(() => {
@@ -647,19 +714,76 @@
 
     setInterval(createFlower, 500);
 
+    const playSlokaFallback = () => {
+      if (!("speechSynthesis" in window)) {
+        return false;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(slokaText);
+      utterance.lang = "sa-IN";
+      utterance.rate = 0.9;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+      musicToggle.textContent = "📿 Playing Sanskrit Sloka";
+      return true;
+    };
+
+    const attemptPlayMusic = async () => {
+      try {
+        await bgMusic.play();
+        musicToggle.textContent = "⏸ Pause Temple Music";
+        return true;
+      } catch (error) {
+        musicToggle.textContent = "🔊 Tap to Enable Music";
+        return false;
+      }
+    };
+
+    const handleUserGesture = async () => {
+      if (!bgMusic.paused) {
+        return;
+      }
+      const played = await attemptPlayMusic();
+      if (!played) {
+        playSlokaFallback();
+      }
+    };
+
+    document.addEventListener("click", handleUserGesture, { once: true });
+    document.addEventListener("touchstart", handleUserGesture, { once: true });
+
     musicToggle.addEventListener("click", async () => {
       if (bgMusic.paused) {
-        try {
-          await bgMusic.play();
-          musicToggle.textContent = "⏸ Pause Temple Music";
-        } catch (error) {
-          musicToggle.textContent = "🔊 Tap to Enable Music";
+        const played = await attemptPlayMusic();
+        if (!played) {
+          playSlokaFallback();
         }
       } else {
         bgMusic.pause();
         musicToggle.textContent = "🎶 Play Temple Music";
       }
     });
+
+    const ensureLottiePlayback = () => {
+      const players = document.querySelectorAll("lottie-player");
+      const fallbackIcons = ["🪔", "🌸", "🎉"];
+
+      const replaceWithFallback = (player, index = 0) => {
+        const fallback = document.createElement("div");
+        fallback.className = "lottie-fallback";
+        fallback.textContent = fallbackIcons[index % fallbackIcons.length];
+        player.replaceWith(fallback);
+      };
+
+      if (!customElements.get("lottie-player")) {
+        players.forEach((player, index) => replaceWithFallback(player, index));
+        return;
+      }
+
+      players.forEach((player, index) => {
+        player.addEventListener("error", () => replaceWithFallback(player, index));
+      });
+    };
   </script>
 </body>
 </html>
