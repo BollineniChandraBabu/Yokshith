@@ -124,13 +124,23 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(7, 4, 2, 0.9), rgba(14, 7, 4, 0.7));
+      background: linear-gradient(180deg, rgba(7, 4, 2, 0.92), rgba(14, 7, 4, 0.75));
     }
 
     .hero-content {
       position: relative;
       max-width: 800px;
       z-index: 2;
+      animation: floatHero 8s ease-in-out infinite;
+    }
+
+    @keyframes floatHero {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
     }
 
     .hero-title {
@@ -153,6 +163,16 @@
       font-family: "Noto Serif Telugu", serif;
       color: #fff;
       text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+      transition: transform 0.6s ease, text-shadow 0.6s ease;
+    }
+
+    .name-title span {
+      display: block;
+    }
+
+    .name-title:hover {
+      transform: scale(1.02);
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
     }
 
     .cta-card {
@@ -163,6 +183,12 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .cta-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.45);
     }
 
     .cta-card p {
@@ -180,6 +206,12 @@
       padding: 0.5rem 1rem;
       border-radius: 999px;
       font-weight: 600;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      transition: transform 0.4s ease;
+    }
+
+    .toggle:hover {
+      transform: translateY(-3px);
     }
 
     .toggle input {
@@ -241,6 +273,13 @@
       border: 1px solid rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(12px);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      transition: transform 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
     .info-card h3 {
@@ -275,6 +314,7 @@
       overflow: hidden;
       height: 380px;
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .slide {
@@ -283,11 +323,13 @@
       background-size: cover;
       background-position: center;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 1s ease, transform 8s ease;
+      transform: scale(1.05);
     }
 
     .slide.active {
       opacity: 1;
+      transform: scale(1);
     }
 
     .qr-card {
@@ -315,6 +357,13 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       cursor: pointer;
       font-weight: 600;
+      color: #fff;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .music-control:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     }
 
     .flower {
@@ -378,6 +427,19 @@
       margin-top: 2rem;
     }
 
+    .section-title {
+      position: relative;
+    }
+
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 120px;
+      height: 4px;
+      margin: 0.8rem auto 0;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
     @media (max-width: 768px) {
       header.hero {
         padding-top: 7rem;
@@ -425,10 +487,13 @@
     <div class="hero-content">
       <p class="hero-title">Annaprasana Invitation</p>
       <p class="hero-subtitle">Blessed by the divine and guided by tradition</p>
-      <h1 class="name-title">చి. యోక్షిత్ సాయి</h1>
+      <h1 class="name-title">
+        <span data-lang="en">Chi. Yokshith Sai</span>
+        <span data-lang="te" style="display:none;">చి. యోక్షిత్ సాయి</span>
+      </h1>
       <div class="cta-card reveal">
         <p data-lang="en">With the blessings of the Almighty, we invite you to celebrate the first rice ceremony of our beloved little one. Your presence and blessings will make the moment divine.</p>
-        <p data-lang="te" style="display:none;">దైవ ఆశీస్సులతో మా ప్రియ చిన్నారికి తొలి అన్నప్రాశన పర్వదిన వేడుకకు మీ కుటుంబ సమేతంగా హాజరై ఆశీర్వదించగలరు.</p>
+        <p data-lang="te" style="display:none;">దైవ ఆశీస్సులతో మా ప్రియ చిన్నారికి తొలి అన్నప్రాశన వేడుకకు మీ కుటుంబ సమేతంగా హాజరై ఆశీర్వదించండి.</p>
         <div class="toggle">
           <span>EN</span>
           <input id="langToggle" type="checkbox" />
@@ -448,9 +513,14 @@
     <h2 class="section-title">Event Highlights</h2>
     <div class="info-grid">
       <div class="info-card reveal">
+        <h3>Date</h3>
+        <p data-lang="en">07/Feb/2026 — A sacred morning to celebrate together.</p>
+        <p data-lang="te" style="display:none;">07/Feb/2026 — కలిసి ఆనందించే పవిత్ర ఉదయం.</p>
+      </div>
+      <div class="info-card reveal">
         <h3>Invitees</h3>
         <p data-lang="en">Chandra & Sindhu request the honor of your presence.</p>
-        <p data-lang="te" style="display:none;">చంద్ర & సింధు గారు మీను ఆహ్వానిస్తున్నారు.</p>
+        <p data-lang="te" style="display:none;">చంద్ర & సింధు గారు మిమ్మల్ని ఆహ్వానిస్తున్నారు.</p>
       </div>
       <div class="info-card reveal">
         <h3>Location</h3>
@@ -480,7 +550,7 @@
       <div>
         <h3>Scan for Google Maps</h3>
         <p data-lang="en">Open the location instantly and join us at Golagamudi.</p>
-        <p data-lang="te" style="display:none;">గొలగమూడి స్థానం మ్యాప్స్‌లో తెరచేందుకు స్కాన్ చేయండి.</p>
+        <p data-lang="te" style="display:none;">గొలగమూడి స్థలాన్ని మ్యాప్స్‌లో తెరవడానికి స్కాన్ చేయండి.</p>
       </div>
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://www.google.com/maps/search/?api=1&query=Golagamudi" alt="QR code for Golagamudi" />
     </div>
