@@ -449,6 +449,52 @@
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     }
 
+    .calendar-card {
+      margin-top: 2.5rem;
+      padding: 2rem;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+
+    .calendar-card p {
+      color: #f7e7cc;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .calendar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .calendar-actions a,
+    .calendar-actions button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.75rem 1.6rem;
+      font-weight: 600;
+      font-family: "Poppins", sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .calendar-actions a:hover,
+    .calendar-actions button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
     .flower {
       position: fixed;
       top: -10vh;
@@ -619,7 +665,10 @@
         <p data-lang="en">With the blessings of the Almighty, we invite you to celebrate the first rice ceremony of our beloved little one. Your presence and blessings will make the moment divine.</p>
         <p data-lang="te" style="display:none;">దైవ ఆశీస్సులతో మా ప్రియ చిన్నారికి తొలి అన్నప్రాశన వేడుకకు మీ కుటుంబ సమేతంగా హాజరై ఆశీర్వదించండి.</p>
       </div>
-      <button class="music-control" id="musicToggle">🎶 Play Temple Music</button>
+      <button class="music-control" id="musicToggle">🎶 Play Song</button>
+      <audio id="bgAudio" preload="auto" loop>
+        <source src="assets/Sirulokinche%20Chinni-320kbps.mp3" type="audio/mpeg" />
+      </audio>
     </div>
   </header>
 
@@ -650,6 +699,15 @@
         <h3>Tradition</h3>
         <p data-lang="en">A blend of Telugu heritage, Vedic chants, and joyful blessings.</p>
         <p data-lang="te" style="display:none;">తెలుగు సంప్రదాయం, వైదిక మంత్రాలు, ఆనంద ఆశీర్వాదాలు.</p>
+      </div>
+    </div>
+    <div class="calendar-card reveal">
+      <h3 class="section-title" style="font-size: 1.8rem; margin-bottom: 1rem;">Add to Calendar</h3>
+      <p data-lang="en">Save the Annaprasana ceremony to your calendar so you can celebrate with us on time.</p>
+      <p data-lang="te" style="display:none;">అన్నప్రాశన వేడుకను మీ క్యాలెండర్‌లో సేవ్ చేసుకొని సమయానికి వచ్చి ఆనందించండి.</p>
+      <div class="calendar-actions">
+        <button type="button" id="addToCalendar">📅 Google Calendar</button>
+        <button type="button" id="downloadIcs">⬇️ Download .ics</button>
       </div>
     </div>
   </section>
@@ -694,18 +752,24 @@
     const shloka = document.getElementById("shloka");
     const slides = document.querySelectorAll(".slide");
     const musicToggle = document.getElementById("musicToggle");
+    const bgAudio = document.getElementById("bgAudio");
     const progressRing = document.getElementById("progress-ring");
     const copyrightYear = document.getElementById("copyright-year");
     const visitorCount = document.getElementById("visitor-count");
+    const addToCalendarButton = document.getElementById("addToCalendar");
+    const downloadIcs = document.getElementById("downloadIcs");
     const totalLength = progressRing.getTotalLength();
     const slokaText = shloka.textContent.trim();
 
     let slideIndex = 0;
-    let audioContext;
-    let bellIntervalId = null;
-    let droneGain = null;
-    let droneOscillator = null;
     let isPlaying = false;
+    const eventDetails = {
+      title: "Yokshith Sai Annaprasana",
+      description: "Annaprasana Ceremony",
+      location: "Golagamudi Nellore",
+      start: "20260215T050000Z",
+      end: "20260215T100000Z"
+    };
 
     const setLanguage = () => {
       const isTelugu = toggle.checked;
@@ -779,88 +843,19 @@
 
     setInterval(createFlower, 500);
 
-    const playSlokaFallback = () => {
-      if (!("speechSynthesis" in window)) {
-        return false;
-      }
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(slokaText);
-      utterance.lang = "sa-IN";
-      utterance.rate = 0.9;
-      utterance.pitch = 1.0;
-      window.speechSynthesis.speak(utterance);
-      musicToggle.textContent = "📿 Playing Sanskrit Sloka";
-      return true;
+    const updateMusicButton = (label) => {
+      musicToggle.textContent = label;
     };
 
-    const startTempleDrone = () => {
-      if (droneOscillator) {
-        return;
-      }
-      droneOscillator = audioContext.createOscillator();
-      droneGain = audioContext.createGain();
-      droneOscillator.type = "sine";
-      droneOscillator.frequency.value = 146.83;
-      droneGain.gain.setValueAtTime(0, audioContext.currentTime);
-      droneGain.gain.linearRampToValueAtTime(0.035, audioContext.currentTime + 1.2);
-      droneOscillator.connect(droneGain);
-      droneGain.connect(audioContext.destination);
-      droneOscillator.start();
-    };
-
-    const stopTempleDrone = () => {
-      if (!droneOscillator || !droneGain) {
-        return;
-      }
-      const now = audioContext.currentTime;
-      droneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
-      droneOscillator.stop(now + 0.7);
-      droneOscillator = null;
-      droneGain = null;
-    };
-
-    const createBellChime = () => {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      const now = audioContext.currentTime;
-      const outputGain = audioContext.createGain();
-      const partials = [528, 792, 1056, 1320];
-
-      outputGain.gain.setValueAtTime(0, now);
-      outputGain.gain.linearRampToValueAtTime(0.32, now + 0.08);
-      outputGain.gain.exponentialRampToValueAtTime(0.0006, now + 2.8);
-      outputGain.connect(audioContext.destination);
-
-      partials.forEach((frequency, index) => {
-        const osc = audioContext.createOscillator();
-        osc.type = "sine";
-        osc.frequency.value = frequency;
-        const gain = audioContext.createGain();
-        gain.gain.value = 0.26 - index * 0.05;
-        osc.connect(gain);
-        gain.connect(outputGain);
-        osc.start(now);
-        osc.stop(now + 3.0);
-      });
-    };
-
-    const attemptPlayMusic = async () => {
+    const attemptPlaySong = async () => {
       try {
-        if (!audioContext) {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        await audioContext.resume();
-        startTempleDrone();
-        createBellChime();
-        if (!bellIntervalId) {
-          bellIntervalId = setInterval(createBellChime, 4500);
-        }
+        bgAudio.volume = 0.7;
+        await bgAudio.play();
         isPlaying = true;
-        musicToggle.textContent = "⏸ Pause Temple Music";
+        updateMusicButton("⏸ Pause Song");
         return true;
       } catch (error) {
-        musicToggle.textContent = "🔊 Tap to Enable Music";
+        updateMusicButton("🔊 Tap to Play Song");
         return false;
       }
     };
@@ -869,10 +864,7 @@
       if (isPlaying) {
         return;
       }
-      const played = await attemptPlayMusic();
-      if (!played) {
-        playSlokaFallback();
-      }
+      await attemptPlaySong();
     };
 
     document.addEventListener("click", handleUserGesture, { once: true });
@@ -880,19 +872,58 @@
 
     musicToggle.addEventListener("click", async () => {
       if (!isPlaying) {
-        const played = await attemptPlayMusic();
-        if (!played) {
-          playSlokaFallback();
-        }
+        await attemptPlaySong();
       } else {
-        if (bellIntervalId) {
-          clearInterval(bellIntervalId);
-          bellIntervalId = null;
-        }
-        stopTempleDrone();
+        bgAudio.pause();
         isPlaying = false;
-        musicToggle.textContent = "🎶 Play Temple Music";
+        updateMusicButton("🎶 Play Song");
       }
+    });
+
+    window.addEventListener("load", () => {
+      attemptPlaySong();
+    });
+
+    const addToCalendar = () => {
+      window.open(
+        "https://www.google.com/calendar/render?action=TEMPLATE&text=Yokshith+Sai+Annaprasana&dates=20260215T050000Z/20260215T100000Z&details=Annaprasana+Ceremony&location=Golagamudi+Nellore",
+        "_blank"
+      );
+    };
+
+    addToCalendarButton.addEventListener("click", addToCalendar);
+
+    const buildIcsFile = () => {
+      const lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Annaprasana Invitation//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "BEGIN:VEVENT",
+        `UID:${Date.now()}@annaprasana`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`,
+        `DTSTART:${eventDetails.start}`,
+        `DTEND:${eventDetails.end}`,
+        `SUMMARY:${eventDetails.title}`,
+        `DESCRIPTION:${eventDetails.description}`,
+        `LOCATION:${eventDetails.location}`,
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ];
+      return lines.join("\r\n");
+    };
+
+    downloadIcs.addEventListener("click", () => {
+      const blob = new Blob([buildIcsFile()], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "annaprasana-event.ics";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
     });
 
   </script>
